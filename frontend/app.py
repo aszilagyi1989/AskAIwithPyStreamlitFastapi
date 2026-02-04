@@ -61,7 +61,7 @@ if "auth" not in st.session_state:
     st.session_state.user_info = user_info
     st.rerun()
 
-st.stop()
+  st.stop()
 
   user = st.session_state.user_info
   st.sidebar.image(user.get("picture"), width = 50) # Profilkép
