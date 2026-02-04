@@ -18,6 +18,16 @@ def initialization_function():
 
 answers = initialization_function()
 
+st.set_page_config(
+  layout = 'wide',
+  page_title = 'Ask AI with Python',
+  page_icon = 'ikon.png', # https://map.ksh.hu/timea/images/shortcut.ico
+  menu_items = {'Get help': 'mailto:sz.adam1989@gmail.com',
+                'Report a bug': 'mailto:sz.adam1989@gmail.com',
+                'About': 'This web application makes you able to chat and generate pictures and videos with ChatGPT through OpenAI module.'}
+  )
+
+
 REDIRECT_URI = st.secrets["REDIRECT_URI"]
 COOKIE_SECRET = st.secrets["COOKIE_SECRET"]
 CLIENT_ID = st.secrets["CLIENT_ID"]
@@ -40,8 +50,13 @@ if "auth" not in st.session_state:
   )
 
   if result:
+    
+    id_token = result.get("token", {}).get("id_token")
+    payload = id_token.split('.')[1]
+    user_info = json.loads(base64.urlsafe_b64decode(payload + "==").decode("utf-8"))
+        
     st.session_state.auth = result
-    st.session_state.token = result.get("token")
+    st.session_state.token = user_info
     st.rerun()
 else:
   user = st.session_state.user_info
@@ -50,11 +65,12 @@ else:
   st.sidebar.write(f"📧 {user.get('email')}")
   st.success("Sikeresen bejelentkeztél!")
   if st.button("Kijelentkezés"):
-    del st.session_state.auth
-    del st.session_state.user_info
+    for key in ["auth", "user_info"]:
+      if key in st.session_state:
+        del st.session_state[key]
     st.rerun()
 
-  st.write("A tokened:", st.session_state.auth)
+  st.write("Adataid:", user)
 
 # if not st.user.is_logged_in:
 #   st.info("If you have got an OpenAI API Key, then after sign in with Google you can use this web application with different AI models to chat and create photos and videos.")
