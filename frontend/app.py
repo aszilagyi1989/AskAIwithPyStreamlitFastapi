@@ -38,7 +38,7 @@ if "auth" not in st.session_state:
     key = "google_auth",
     use_container_width = True
   )
-  st.stop()
+
   if result:
     st.session_state.auth = result
     st.session_state.token = result.get("token")
