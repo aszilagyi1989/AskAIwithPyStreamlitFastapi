@@ -29,20 +29,22 @@ st.set_page_config(
 
 
 REDIRECT_URI = st.secrets["REDIRECT_URI"]
-COOKIE_SECRET = st.secrets["COOKIE_SECRET"]
+# COOKIE_SECRET = st.secrets["COOKIE_SECRET"]
 CLIENT_ID = st.secrets["CLIENT_ID"]
 CLIENT_SECRET = st.secrets["CLIENT_SECRET"]
-SERVER_METADATA_URL = st.secrets["SERVER_METADATA_URL"]
+# SERVER_METADATA_URL = st.secrets["SERVER_METADATA_URL"]
 AUTHORIZE_URL = "https://accounts.google.com"
 TOKEN_URL = "https://oauth2.googleapis.com"
 REVOKE_URL = "https://oauth2.googleapis.com"
 
 oauth2 = OAuth2Component(CLIENT_ID, CLIENT_SECRET, AUTHORIZE_URL, TOKEN_URL, TOKEN_URL, REVOKE_URL)
 
+st.set_page_config(page_title = "Google Auth App", page_icon = "🔐")
+
 if "auth" not in st.session_state:
   result = oauth2.authorize_button(
     name = "Bejelentkezés Google-lel",
-    icon = "https://www.google.com.cu",
+    icon = "https://www.google.com",
     redirect_uri = REDIRECT_URI,
     scope = "openid email profile",
     key = "google_auth",
@@ -56,9 +58,11 @@ if "auth" not in st.session_state:
     user_info = json.loads(base64.urlsafe_b64decode(payload + "==").decode("utf-8"))
         
     st.session_state.auth = result
-    st.session_state.token = user_info
+    st.session_state.user_info = user_info
     st.rerun()
-else:
+
+st.stop()
+
   user = st.session_state.user_info
   st.sidebar.image(user.get("picture"), width = 50) # Profilkép
   st.sidebar.write(f"Greetings, **{user.get('name')}**!")
