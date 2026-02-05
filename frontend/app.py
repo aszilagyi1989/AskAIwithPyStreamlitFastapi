@@ -29,6 +29,13 @@ st.set_page_config(
                 'About': 'This web application makes you able to chat and generate pictures and videos with ChatGPT through OpenAI module.'}
   )
 
+if 'check_url' not in st.session_state:
+  st.session_state['check_url'] = True
+  # Ha a Google-tól jövünk vissza, a URL-ben lesz egy 'code' paraméter
+  query_params = st.query_params
+  if "code" in query_params:
+    # Itt hagyjuk, hogy az auth.login() feldolgozza
+    pass
 
 # REDIRECT_URI = st.secrets["REDIRECT_URI"]
 # # COOKIE_SECRET = st.secrets["COOKIE_SECRET"]
