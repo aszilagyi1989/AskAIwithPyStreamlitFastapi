@@ -1,8 +1,0 @@
-authlib
-boto3
-openai
-pandas
-requests
-streamlit
-streamlit-oauth
-streamlit_option_menu
