@@ -76,19 +76,34 @@ st.set_page_config(
 # 
 #   st.write("Adataid:", user)
 
-if not st.user.is_logged_in:
-  st.info("If you have got an OpenAI API Key, then after sign in with Google you can use this web application with different AI models to chat and create photos and videos.")
-  st.info("You can buy credits here: https://platform.openai.com/settings/organization/billing/overview")
-  st.info("Your email address and other data like your questions and descriptions are saved into PostgreSQL database tables.")
-  st.info("Your AI generated photos and videos are stored on Amazon locally.")
-  if st.button("Login with Google"):
-    st.login()
-  st.stop()
-else:
-  st.write(f"Greetings, {st.user.name}!")
+# if not st.user.is_logged_in:
+#   st.info("If you have got an OpenAI API Key, then after sign in with Google you can use this web application with different AI models to chat and create photos and videos.")
+#   st.info("You can buy credits here: https://platform.openai.com/settings/organization/billing/overview")
+#   st.info("Your email address and other data like your questions and descriptions are saved into PostgreSQL database tables.")
+#   st.info("Your AI generated photos and videos are stored on Amazon locally.")
+#   if st.button("Login with Google"):
+#     st.login()
+#   st.stop()
+# else:
+#   st.write(f"Greetings, {st.user.name}!")
+# 
+#   if st.button("Logout"):
+#     st.logout()
 
-  if st.button("Logout"):
-    st.logout()
+auth = Authenticate(
+  secret_key = st.secrets["GOOGLE_CLIENT_SECRET"],
+  client_id = st.secrets["GOOGLE_CLIENT_ID"],
+  redirect_uri = st.secrets["REDIRECT_URI"],
+  cookie_name = "my_auth_cookie"
+)
+
+auth.check_authenticity()
+
+if not st.session_state.get("connected"):
+  auth.login()
+else:
+  st.write(f"Üdv, {st.session_state['user_info']['name']}!")
+  auth.logout()
 
 st.title('Ask AI with Python', anchor = False, help = None)
 password = st.text_input('Set your OpenAI API key:', type = 'password', value = os.environ['OPENAI_API_KEY'], placeholder = "If you don't have one, then you can create here: https://platform.openai.com/api-keys", key = "my_key") 
