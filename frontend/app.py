@@ -92,9 +92,9 @@ st.set_page_config(
 #     st.logout()
 
 auth = Authenticate(
-  secret_key = st.secrets["GOOGLE_CLIENT_SECRET"],
-  client_id = st.secrets["GOOGLE_CLIENT_ID"],
-  redirect_uri = st.secrets["REDIRECT_URI"],
+  secret_key = os.environ.get("GOOGLE_CLIENT_SECRET"),
+  client_id = os.environ.get("GOOGLE_CLIENT_ID"),
+  redirect_uri = os.environ.get("REDIRECT_URI"),
   cookie_name = "my_auth_cookie"
 )
 
