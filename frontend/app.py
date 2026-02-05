@@ -1,7 +1,8 @@
 import os
 import streamlit as st
 from streamlit_option_menu import option_menu
-from streamlit_oauth import OAuth2Component
+from streamlit_google_auth import Authenticate
+# from streamlit_oauth import OAuth2Component
 from openai import OpenAI
 from datetime import datetime
 import pandas as pd
