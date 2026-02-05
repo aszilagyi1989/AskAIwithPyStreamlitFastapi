@@ -1,4 +1,5 @@
 import os
+import json
 import streamlit as st
 from streamlit_option_menu import option_menu
 from streamlit_google_auth import Authenticate
@@ -91,12 +92,36 @@ st.set_page_config(
 #   if st.button("Logout"):
 #     st.logout()
 
+# auth = Authenticate(
+#   os.environ.get("CLIENT_ID"),
+#   os.environ.get("CLIENT_SECRET"),
+#   os.environ.get("REDIRECT_URI"),
+#   "my_auth_cookie",
+#   os.environ.get("COOKIE_SECRET")
+# )
+
+# 1. JSON struktúra összeállítása a környezeti változókból
+google_secrets = {
+    "web": {
+        "client_id": os.environ.get("CLIENT_ID"),
+        "client_secret": os.environ.get("CLIENT_SECRET"),
+        "auth_uri": "https://accounts.google.com",
+        "token_uri": "https://oauth2.googleapis.com",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com",
+        "redirect_uris": [os.environ.get("REDIRECT_URI")]
+    }
+}
+
+# 2. Mentés egy ideiglenes fájlba a Render-en
+with open("google_credentials.json", "w") as f:
+    json.dump(google_secrets, f)
+
+# 3. Az Authenticate hívása a fájl útvonalával
 auth = Authenticate(
-  os.environ.get("CLIENT_ID"),
-  os.environ.get("CLIENT_SECRET"),
-  os.environ.get("REDIRECT_URI"),
-  "my_auth_cookie",
-  os.environ.get("COOKIE_SECRET")
+    secret_credentials_path="google_credentials.json",
+    cookie_name="my_auth_cookie",
+    cookie_key=os.environ.get("COOKIE_SECRET", "egy_nagyon_titkos_kulcs"),
+    redirect_uri=os.environ.get("REDIRECT_URI")
 )
 
 auth.login()
