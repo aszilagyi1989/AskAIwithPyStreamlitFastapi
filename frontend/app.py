@@ -132,6 +132,7 @@ if st.session_state.get("connected"):
     auth.logout()
 else:
   st.info("Kérlek, jelentkezz be a folytatáshoz.")
+  st.stop()
 
 st.title('Ask AI with Python', anchor = False, help = None)
 password = st.text_input('Set your OpenAI API key:', type = 'password', value = os.environ['OPENAI_API_KEY'], placeholder = "If you don't have one, then you can create here: https://platform.openai.com/api-keys", key = "my_key") 
